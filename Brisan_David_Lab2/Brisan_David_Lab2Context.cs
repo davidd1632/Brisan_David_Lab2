@@ -9,6 +9,10 @@ public class Brisan_David_Lab2Context : DbContext
     }
 
     public DbSet<Book> Book { get; set; } = default!;
+    public DbSet<Category> Category { get; set; }
+    public DbSet<BookCategory> BookCategory { get; set; }
     public DbSet<Publisher> Publishers { get; set; } = default!;
     public DbSet<Author> Author { get; set; } = default!;
+    public DbSet<Publisher> Publisher { get; set; }
+
 }

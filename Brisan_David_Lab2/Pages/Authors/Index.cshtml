@@ -2,41 +2,66 @@
 @model Brisan_David_Lab2.Pages.Authors.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Books";
 }
 
-<h1>Index</h1>
+<h1>Books Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-success">Create New Book</a>
 </p>
-<table class="table">
+
+<table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Author[0].FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author[0].LastName)
-            </th>
-            <th></th>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Publishing Date</th>
+            <th>Publisher</th>
+            <th>Categories</th> <!-- Coloana noua -->
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Author) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.LastName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.BookD.Books)
+        {
+            // Daca ID-ul cartii curente este acelasi cu cel trimis ca parametru, coloram randul
+            string selectedRow = "";
+            if (item.ID == Model.BookID)
+            {
+                selectedRow = "table-success";
+            }
+
+            <tr class="@selectedRow">
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Author)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>@Html.DisplayFor(modelItem => item.PublishingDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Publisher.PublisherName)</td>
+
+                <!-- Aici parcurgem categoriile cartii si le afisam ca text -->
+                <td>
+                    @if (item.BookCategories != null && item.BookCategories.Any())
+                    {
+                        foreach (var cat in item.BookCategories)
+                        {
+                            @cat.Category.CategoryName
+                            <br />
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">No categories</span>
+                    }
+                </td>
+
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
